@@ -1,3 +1,49 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+article {
+  h2 {
+    font-size: 1.4rem;
+    margin-top: 1.9rem;
+    margin-bottom: 1rem;
+
+    + p {
+      margin-left: 1rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    margin-top: 1.6rem;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+
+    + p {
+      margin-left: 1.5rem;
+    }
+  }
+
+  h4 {
+    font-size: 1.05rem;
+    margin-top: 1.3rem;
+    margin-bottom: 0.8rem;
+    margin-left: 1.5rem;
+
+    + p {
+      margin-left: 2rem;
+    }
+  }
+
+  // article 내의 모든 figure에 적용하고 싶을 경우
+  figure {
+    margin-left: 1.5rem !important;
+  }  
+}
+
+article ol {
+  margin-left: 0.5rem;
+}
+
+article ul {
+  margin-left: 0.5rem;
+}
