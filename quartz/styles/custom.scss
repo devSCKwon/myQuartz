@@ -47,3 +47,8 @@ article ol {
 article ul {
   margin-left: 0.5rem;
 }
+
+// toc 영역의 사이즈 반영
+.toc.desktop-only {
+    max-height: 30%;
+}
