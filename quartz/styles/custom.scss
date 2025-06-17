@@ -50,5 +50,6 @@ article ul {
 
 // toc 영역의 사이즈 반영
 .toc.desktop-only {
-    max-height: 30%;
+  max-height: 40%;
+  overflow: auto;    
 }
