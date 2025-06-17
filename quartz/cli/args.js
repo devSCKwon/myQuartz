@@ -2,7 +2,7 @@ export const CommonArgv = {
   directory: {
     string: true,
     alias: ["d"],
-    default: "myQuartz_content",
+    default: "content",
     describe: "directory to look for content files",
   },
   verbose: {
