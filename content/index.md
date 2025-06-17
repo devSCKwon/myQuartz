@@ -1,5 +1,5 @@
 ---
-title: Welcome to Quartz
+title: Welcome
 ---
 
 Welcome SCKwon's Quartz!!
