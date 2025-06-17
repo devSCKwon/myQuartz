@@ -53,3 +53,12 @@ article ul {
   max-height: 40%;
   overflow: auto;    
 }
+//content-meta css 컬러수정
+.content-meta {
+  color: var(--gray);
+}
+
+//tag 위치수정 (오른쪽 정렬)
+.tags {
+    justify-self: end;
+}
