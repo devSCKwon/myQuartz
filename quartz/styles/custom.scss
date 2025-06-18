@@ -62,3 +62,10 @@ article ul {
 .tags {
     justify-self: end;
 }
+
+//마크다운 테이블 길이조절, 가로로 무한확장
+table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
