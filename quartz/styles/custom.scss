@@ -69,3 +69,31 @@ table {
   overflow-x: auto;
   white-space: nowrap;
 }
+
+/* 기본(화이트) 모드: 헤더는 연한 그레이, 글씨는 검정 */
+// table th {
+//   background-color: #f5f6fa !important;   /* 아주 연한 그레이 */ 
+//   color: #222 !important;                 /* 진한 회색/검정 */
+//   font-weight: bold;
+// }
+
+// /* 다크 모드: 헤더는 어두운 그레이, 글씨는 밝게 */
+// @media (prefers-color-scheme: dark) {
+//   table th {
+//     background-color: #23272e !important;  /* 진한 그레이 */
+//     color: #fafafd !important;             /* 흰색 */
+//   }
+// }
+
+/* 기본(라이트) 모드: 아주 연한 그레이 배경, 진한 글씨 */
+table th {
+  background-color: #f5f6fa;
+  color: #222;
+  font-weight: bold;
+}
+
+/* 다크 모드: saved-theme="dark" 속성이 붙으면 오버라이드 */
+:root[saved-theme="dark"] table th {
+  background-color: #23272e;
+  color: #fafafd;
+}
