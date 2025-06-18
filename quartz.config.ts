@@ -9,7 +9,7 @@ import * as Plugin from "./quartz/plugins"
 const config: QuartzConfig = {
   configuration: {
     pageTitle: "🪴SEJIN Manual",
-    pageTitleSuffix: "세진문서모음",
+    pageTitleSuffix: "_세진",
     enableSPA: true,
     enablePopovers: true,
     analytics: {
