@@ -287,6 +287,71 @@
                 font-size: 18px;
             }
         }
+
+        /* 인쇄용 스타일 */
+        @media print {
+            body {
+                background-color: #fff; /* 인쇄 시 배경색 제거 */
+                color: #000; /* 기본 글자색 검정 */
+            }
+
+            .container {
+                box-shadow: none; /* 인쇄 시 그림자 제거 */
+                padding: 0; /* 인쇄 시 패딩 제거 */
+            }
+
+            .header .date {
+                position: static; /* 인쇄 시 절대 위치 해제 */
+                text-align: right;
+                margin-bottom: 20px;
+            }
+
+            .tree-visual {
+                color: #333; /* 인쇄 시 더 잘 보이도록 색상 조정 */
+                background-color: #fff; /* 인쇄 시 배경색 제거 */
+                padding: 10px; /* 인쇄 시 패딩 조정 */
+                border: 1px solid #ccc; /* 인쇄 시 테두리 추가 */
+            }
+
+            .level-section {
+                break-inside: avoid; /* 섹션이 페이지 중간에 잘리는 것 방지 */
+                margin-bottom: 20px; /* 인쇄 시 마진 조정 */
+            }
+
+            .org-card {
+                break-inside: avoid; /* 카드가 페이지 중간에 잘리는 것 방지 */
+                box-shadow: none; /* 인쇄 시 그림자 제거 */
+                border: 1px solid #ccc; /* 인쇄 시 테두리 추가 */
+                margin-bottom: 15px; /* 인쇄 시 마진 조정 */
+            }
+
+            .org-cards {
+                gap: 15px; /* 인쇄 시 간격 조정 */
+            }
+
+            .card-header {
+                border-bottom: 1px solid #eee; /* 인쇄 시 테두리 조정 */
+            }
+
+            .contact div i {
+                 color: #333; /* 인쇄 시 아이콘 색상 조정 */
+            }
+
+            .sub-org::before {
+                background-color: #ccc; /* 인쇄 시 라인 색상 조정 */
+            }
+
+            .guidelines {
+                border-left: 1px solid #ccc; /* 인쇄 시 테두리 조정 */
+                background-color: #fff; /* 인쇄 시 배경색 제거 */
+                padding: 10px; /* 인쇄 시 패딩 조정 */
+            }
+
+            .footer {
+                border-top: 1px solid #eee; /* 인쇄 시 테두리 조정 */
+                color: #666; /* 인쇄 시 글자색 조정 */
+            }
+        }
     </style>
 </head>
 <body>
