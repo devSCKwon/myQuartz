@@ -2,7 +2,7 @@
 aliases: [정보자산위험관리절차서_TOC]
 tags: []
 date created: 목요일, 6월 19일 2025, 11:13:59 오전
-date modified: 목요일, 6월 19일 2025, 12:59:55 오후
+date modified: 금요일, 6월 20일 2025, 11:10:46 오전
 draft: "true"
 ---
 <div class="toc-title">목 차</div>
@@ -100,3 +100,4 @@ draft: "true"
     <div class="toc-row toc-indent-1"><span class="toc-item">6. 문서 관련 주요 보안 솔루션</span><span class="toc-leader"></span><span class="toc-page">27</span></div>
     <div class="toc-row toc-indent-1"><span class="toc-item">7. 주의사항</span><span class="toc-leader"></span><span class="toc-page">27</span></div>
 </div>
+  <div class="toc-row toc-top"><span class="toc-item"><b>별첨 D. 표준양식 및 작성샘플</b></div>
