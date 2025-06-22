@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)https://devsckwon.github.io/myQuartz/static/org_chart_seijn.html -->
+<html lang="ko" class="trancy-ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>세진 정보자산 관리 조직도</title>
+<style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Malgun Gothic', 'Nanum Gothic', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        /* 컨테이너 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        /* 헤더 */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header h1 {
+            color: #1a237e;
+            font-size: 32px;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #1a237e;
+            padding-bottom: 15px;
+            display: inline-block;
+        }
+
+        .header .date {
+            font-size: 14px;
+            color: #757575;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        /* 조직도 시각화 (ASCII 아트) */
+        .tree-visual {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+
+        /* 조직도 시각화 (ASCII 아트) */
+        /* .org-tree-visual {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            white-space: pre;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 30px;
+            color: #424242;
+            border-left: 5px solid #1a237e;
+        } */
+
+        /* 계층 구분 */
+        .level-section {
+            margin-bottom: 40px;
+        }
+
+        .level-title {
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            position: relative;
+        }
+
+        .level-1 .level-title {
+            background: linear-gradient(135deg, #1a237e, #3949ab);
+        }
+
+        .level-2 .level-title {
+            background: linear-gradient(135deg, #0d47a1, #1976d2);
+        }
+
+        .level-3 .level-title {
+            background: linear-gradient(135deg, #3f51b5, #7986cb);
+        }
+
+        .level-4 .level-title {
+            background: linear-gradient(135deg, #009688, #4db6ac);
+        }
+
+        /* 조직 카드 */
+        .org-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+
+        .org-card {
+            flex: 0 0 calc(33.333% - 20px);
+            min-width: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .org-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .level-1 .org-card {
+            border-top: 5px solid #1a237e;
+            background-color: #e8eaf6;
+        }
+
+        .level-2 .org-card {
+            border-top: 5px solid #0d47a1;
+            background-color: #e3f2fd;
+        }
+
+        .level-3 .org-card {
+            border-top: 5px solid #3f51b5;
+            background-color: #e8eaf6;
+        }
+
+        .level-4 .org-card {
+            border-top: 5px solid #009688;
+            background-color: #c1eeea;
+        }
+
+        .card-header {
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .department {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #212529;
+        }
+
+        .position {
+            font-size: 14px;
+            color: #757575;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #424242;
+        }
+
+        .role {
+            font-size: 14px;
+            color: #292929;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 13px;
+            color: #757575;
+        }
+
+        .contact div {
+            display: flex;
+            align-items: center;
+        }
+
+        .contact div i {
+            margin-right: 5px;
+            color: #1a237e;
+        }
+
+        /* 하위 조직 표시 */
+        .sub-org {
+            padding-left: 30px;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .sub-org::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: #bdbdbd;
+        }
+
+        /* 조직 지침 섹션 */
+        .guidelines {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            border-left: 5px solid #1a237e;
+        }
+
+        .guidelines h2 {
+            color: #1a237e;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .guideline-section {
+            margin-bottom: 15px;
+        }
+
+        .guideline-section h3 {
+            color: #424242;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .guideline-section p {
+            color: #616161;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .faq-item {
+            background-color: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            /* border-left: 4px solid #e74c3c; */
+            border-left: 5px solid #1a237e;
+
+        }
+        
+        .faq-question {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        
+        .faq-answer {
+            color: #34495e;
+            line-height: 1.7;
+        }
+        
+        .faq-answer ol {
+            padding-left: 20px;
+        }
+        
+        .faq-answer li {
+            margin: 8px 0;
+            padding: 8px 0;
+        }
+        
+        /* 푸터 */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #9e9e9e;
+            font-size: 14px;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 1000px) {
+            .org-card {
+                flex: 0 0 calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .org-card {
+                flex: 0 0 100%;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .level-title {
+                font-size: 18px;
+            }
+        }
+
+        /* 인쇄용 스타일 */
+        @media print {
+            body {
+                background-color: #fff; /* 인쇄 시 배경색 제거 */
+                color: #000; /* 기본 글자색 검정 */
+            }
+
+            .container {
+                box-shadow: none; /* 인쇄 시 그림자 제거 */
+                padding: 0; /* 인쇄 시 패딩 제거 */
+            }
+
+            .header .date {
+                position: static; /* 인쇄 시 절대 위치 해제 */
+                text-align: right;
+                margin-bottom: 20px;
+            }
+
+            .tree-visual {
+                color: #333; /* 인쇄 시 더 잘 보이도록 색상 조정 */
+                background-color: #fff; /* 인쇄 시 배경색 제거 */
+                padding: 10px; /* 인쇄 시 패딩 조정 */
+                border: 1px solid #ccc; /* 인쇄 시 테두리 추가 */
+            }
+
+            .level-section {
+                break-inside: avoid; /* 섹션이 페이지 중간에 잘리는 것 방지 */
+                margin-bottom: 20px; /* 인쇄 시 마진 조정 */
+            }
+
+            .org-card {
+                break-inside: avoid; /* 카드가 페이지 중간에 잘리는 것 방지 */
+                box-shadow: none; /* 인쇄 시 그림자 제거 */
+                border: 1px solid #ccc; /* 인쇄 시 테두리 추가 */
+                margin-bottom: 15px; /* 인쇄 시 마진 조정 */
+            }
+
+            .org-cards {
+                gap: 15px; /* 인쇄 시 간격 조정 */
+            }
+
+            .card-header {
+                border-bottom: 1px solid #eee; /* 인쇄 시 테두리 조정 */
+            }
+
+            .contact div i {
+                 color: #333; /* 인쇄 시 아이콘 색상 조정 */
+            }
+
+            .sub-org::before {
+                background-color: #ccc; /* 인쇄 시 라인 색상 조정 */
+            }
+
+            .guidelines {
+                border-left: 1px solid #ccc; /* 인쇄 시 테두리 조정 */
+                background-color: #fff; /* 인쇄 시 배경색 제거 */
+                padding: 10px; /* 인쇄 시 패딩 조정 */
+            }
+
+            .footer {
+                border-top: 1px solid #eee; /* 인쇄 시 테두리 조정 */
+                color: #666; /* 인쇄 시 글자색 조정 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>세진 정보자산 관리 조직도</h1>
+            <div class="date">생성일: 2025-06-12</div>
+        </div>
+<!-- 조직도 시각화 (ASCII 아트) -->
+<div class="tree-visual">
+대표이사 (CEO) - 경영리더 김민규
+├── 부사장 - 경영리더 홍득희
+│   ├── 연구개발본부(연구개발본부 정보자산책임자) - 상무 김동국
+│   │   ├── 원가영업실 - 실장 조효제
+│   │   │   ├── 원가영업1팀(정보자산관리자) - 팀장 조효제
+│   │   │   └── 원가영업2팀(정보자산관리자) - 팀장 조준식
+│   │   ├── 개발1팀(개발1팀 정보자산관리자) - 팀장 곽병철
+│   │   ├── 개발2팀(개발2팀 정보자산관리자) - 팀장 이효진
+│   │   ├── 설계팀(설계팀 정보자산관리자) - 팀장 김종훈
+│   │   └── 외주관리팀(외주관리팀 정보자산관리자) - 팀장 백만기
+│   ├── 품질본부(품질본부 정보자산책임자) - 상무 김영태
+│   │   ├── 신차품질팀(신차품질팀 정보자산관리자) - 팀장 이희철
+│   │   ├── 품질보증팀(품질보증팀 정보자산관리자) - 팀장 임경환
+│   │   └── 품질경영팀(품질경영팀 정보자산관리자) - 팀장 임철재
+│   ├── 경영지원본부(경영지원본부 정보자산책임자) - 상무 이성영
+│   │   ├── 구매팀(구매팀 정보자산관리자) - 팀장 신정현
+│   │   ├── 재경팀(재경팀 정보자산관리자) - 팀장 천성웅
+│   │   ├── 총무팀(총무팀 정보자산관리자) - 담당 손명천
+│   │   └── 전산팀(전산팀 정보자산관리자) - 담당 권세창
+│   └── 생산본부(생산본부 정보자산책임자) - 상무 최인규
+│       ├── 생산1실 - 실장 박청식
+│       │   ├── 생산1팀(생산1팀 정보자산관리자) - 팀장 김덕진
+│       │   └── 생산기술팀(생산기술팀 정보자산관리자) - 팀장 류동완
+│       └── 생산2실 - 실장 안준우
+│       │   ├── 생산2팀(생산2팀 정보자산관리자) - 팀장 이충호
+│       │   └── 물류팀(물류팀 정보자산관리자) - 팀장 최현오
+│       └── 노무팀 - 팀장 김영빈
+└── 정보보호최고책임자 (CISO) - 상무 이성영
+    ├── 관리보안담당자 - 책임매니저 손명천
+    ├── 물리보안담당자 - 책임매니저 손명천
+    └── 기술보안담당자 - 책임매니저 권세창
+</div>
+<!-- 1계층: 최고경영진 -->
+<div class="level-section level-1">
+    <h2 class="level-title">1계층: 최고경영진</h2>
+    <div class="org-cards">
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">대표이사</div>
+                <div class="position">경영리더 김민규</div>
+            </div>
+            <div class="card-body">
+                <div class="role">전사 정보보안 정책 최종 승인, 정보자산 관리 총괄 책임, 보안예산 승인 및 사고 최종 책임</div>
+                <div class="contact">
+                    <div>📧 mgkim@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">부사장</div>
+                <div class="position">경영리더 홍득희</div>
+            </div>
+            <div class="card-body">
+                <div class="role">전사 정보자산 관리 운영 총괄, 본부간 업무 조정 및 협력, 정보자산 정책 실행 관리</div>
+                <div class="contact">
+                    <div>📧 hdh0123@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 2계층: 직속지원 및 정보보안총괄 -->
+<div class="level-section level-2">
+    <h2 class="level-title">2계층: 직속지원 및 정보보안총괄</h2>
+    <div class="org-cards">
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">CISO/정보보호최고책임자</div>
+                <div class="position">상무 이성영</div>
+            </div>
+            <div class="card-body">
+                <div class="role">정보보안 전략 수립 및 이행, 정보보안 조직 운영 총괄, 정보보안 세부정책 결정권</div>
+                <div class="contact">
+                    <div>📧 symk@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">관리/물리보안담당자</div>
+                <div class="position">책임매니저 손명천</div>
+            </div>
+            <div class="card-body">
+                <div class="role">관리보안 정책 수립 및 이행, 물리보안 정책 수립 및 이행, 출입통제 및 보안장비 관리, 시설보안 관리 </div>
+                <div class="contact">
+                    <div>📧 sohn20@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">기술보안담당자</div>
+                <div class="position">책임매니저 권세창</div>
+            </div>
+            <div class="card-body">
+                <div class="role">기술보안 정책 수립, 시스템 보안 관리, 보안솔루션 운영</div>
+                <div class="contact">
+                    <div>📧 shry19@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 3계층: 본부조직 정보자산 책임자 -->
+<div class="level-section level-3">
+    <h2 class="level-title">3계층: 본부조직 정보자산 책임자</h2>
+    <div class="org-cards">
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">생산본부</div>
+                <div class="position">상무 최인규</div>
+            </div>
+            <div class="card-body">
+                <div class="role">생산정보 자산 관리 총괄, 생산시스템 보안 관리, 제조데이터 접근통제</div>
+                <div class="contact">
+                    <div>📧 cig389@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">연구개발본부</div>
+                <div class="position">상무 김동국</div>
+            </div>
+            <div class="card-body">
+                <div class="role">연구개발 정보자산 보안 총괄, 기술정보 및 특허 관리, 연구데이터 접근권한 관리</div>
+                <div class="contact">
+                    <div>📧 yoonpapa@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">품질본부</div>
+                <div class="position">상무 김영태</div>
+            </div>
+            <div class="card-body">
+                <div class="role">품질정보 자산 관리 총괄, 품질데이터 보안 및 무결성, 품질시스템 정보보호</div>
+                <div class="contact">
+                    <div>📧 ytkim@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">경영지원본부</div>
+                <div class="position">상무 이성영</div>
+            </div>
+            <div class="card-body">
+                <div class="role">경영정보 자산 관리 총괄, 재무/인사 정보보호, 경영시스템 보안 관리</div>
+                <div class="contact">
+                    <div>📧 symk@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 4계층: 정보자산 관리자 -->
+<div class="level-section level-4">
+    <h2 class="level-title">4계층: 정보자산 관리자</h2>
+    <div class="org-cards">
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">생산1실</div>
+                <div class="position">실장 박청식</div>
+            </div>
+            <div class="card-body">
+                <div class="role">생산1실 정보자산 관리, 생산데이터 보안</div>
+                <div class="contact">
+                    <div>📧 sik720701@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">생산2실</div>
+                <div class="position">실장 안준우</div>
+            </div>
+            <div class="card-body">
+                <div class="role">생산2실 정보자산 관리, 물류정보 보안</div>
+                <div class="contact">
+                    <div>📧 junwoo9228@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">원가영업실</div>
+                <div class="position">실장 조효제</div>
+            </div>
+            <div class="card-body">
+                <div class="role">영업/원가 정보자산 관리, 고객정보 및 영업데이터 관리</div>
+                <div class="contact">
+                    <div>📧 jhj@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">개발1팀</div>
+                <div class="position">팀장 곽병철</div>
+            </div>
+            <div class="card-body">
+                <div class="role">개발자료 정보자산 관리, 개발시스템 접근통제</div>
+                <div class="contact">
+                    <div>📧 kbc@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">개발2팀</div>
+                <div class="position">팀장 이효진</div>
+            </div>
+            <div class="card-body">
+                <div class="role">개발자료 정보자산 관리, 개발시스템 접근통제</div>
+                <div class="contact">
+                    <div>📧 hyojin.lee@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">외주관리팀</div>
+                <div class="position">팀장 백만기</div>
+            </div>
+            <div class="card-body">
+                <div class="role">외주업체 정보보안 관리, 계약정보 자산 보호</div>
+                <div class="contact">
+                    <div>📧 mgbaek@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">원가영업1팀</div>
+                <div class="position">팀장 조효제</div>
+            </div>
+            <div class="card-body">
+                <div class="role">영업/원가 정보자산 관리, 고객정보 보호</div>
+                <div class="contact">
+                    <div>📧 jhj@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">원가영업2팀</div>
+                <div class="position">팀장 조준식</div>
+            </div>
+            <div class="card-body">
+                <div class="role">원가정보 일일 관리, 영업데이터 백업</div>
+                <div class="contact">
+                    <div>📧 tuseday26@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">설계팀</div>
+                <div class="position">팀장 김종훈</div>
+            </div>
+            <div class="card-body">
+                <div class="role">설계도면 정보자산 관리, CAD 시스템 보안</div>
+                <div class="contact">
+                    <div>📧 kjh3417@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">신차품질팀</div>
+                <div class="position">팀장 이희철</div>
+            </div>
+            <div class="card-body">
+                <div class="role">신차품질 정보자산 관리, 품질검사 데이터 보안</div>
+                <div class="contact">
+                    <div>📧 adfast@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">품질보증팀</div>
+                <div class="position">팀장 임경환</div>
+            </div>
+            <div class="card-body">
+                <div class="role">품질보증 정보자산 관리, 인증문서 보안 관리</div>
+                <div class="contact">
+                    <div>📧 khlim@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">품질경영팀</div>
+                <div class="position">팀장 임철재</div>
+            </div>
+            <div class="card-body">
+                <div class="role">품질경영 정보자산 관리, QMS 시스템 보안</div>
+                <div class="contact">
+                    <div>📧 lcj@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">구매팀</div>
+                <div class="position">팀장 신정현</div>
+            </div>
+            <div class="card-body">
+                <div class="role">구매정보 자산 관리, 공급업체 정보보호</div>
+                <div class="contact">
+                    <div>📧 gralove@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">재경팀</div>
+                <div class="position">팀장 천성웅</div>
+            </div>
+            <div class="card-body">
+                <div class="role">재무정보 자산 관리, 회계시스템 보안</div>
+                <div class="contact">
+                    <div>📧 cheonsw@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">총무팀</div>
+                <div class="position">담당 손명천</div>
+            </div>
+            <div class="card-body">
+                <div class="role">시설 및 자산 보안관리, 출입통제 시스템, 개인정보 보호</div>
+                <div class="contact">
+                    <div>📧 sohn20@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">전산팀</div>
+                <div class="position">담당 권세창</div>
+            </div>
+            <div class="card-body">
+                <div class="role">IT 시스템 보안 관리, 네트워크 보안 운영</div>
+                <div class="contact">
+                    <div>📧 shry19@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">생산1팀</div>
+                <div class="position">팀장 김덕진</div>
+            </div>
+            <div class="card-body">
+                <div class="role">생산1팀 정보자산 일일관리</div>
+                <div class="contact">
+                    <div>📧 kdj85@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">생산기술팀</div>
+                <div class="position">팀장 류동완</div>
+            </div>
+            <div class="card-body">
+                <div class="role">생산기술 정보자산 관리</div>
+                <div class="contact">
+                    <div>📧 rdw@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">생산2팀</div>
+                <div class="position">팀장 이충호</div>
+            </div>
+            <div class="card-body">
+                <div class="role">생산2팀 정보자산 일일관리</div>
+                <div class="contact">
+                    <div>📧 lch@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">물류팀</div>
+                <div class="position">팀장 최현오</div>
+            </div>
+            <div class="card-body">
+                <div class="role">물류정보 자산 일일관리, 출하정보 보안</div>
+                <div class="contact">
+                    <div>📧 newly76@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+        <div class="org-card">
+            <div class="card-header">
+                <div class="department">노무팀</div>
+                <div class="position">팀장 김영빈</div>
+            </div>
+            <div class="card-body">
+                <div class="role">인사/노무 정보자산 관리</div>
+                <div class="contact">
+                    <div>📧 ybkim@sejin-c.co.kr</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 조직 운영 지침 -->
+<div class="guidelines">
+    <h2>조직 운영 지침</h2>
+    <div class="guideline-section">
+        <h3>보고 체계(7계층)</h3>
+        <p><b>일반사용자 → 정보자산담당자 → 정보자산관리자 → 부서정보자산관리자(실/팀장) → 본부정보자산책임자(본부장) → CISO/부사장 → CEO</b>
+        <p>(주)세진의 조직운영상 정보자산담당자/정보자산관리자/부서정보자산관리자는 겸직으로 허용</p>
+    </div>
+    <div class="guideline-section">
+        <h3>보고 주기</h3>
+        <p>주간(팀장, 실장), 월간(본부장), 분기(CISO/부사장)</p>
+    </div>
+    <div class="guideline-section">
+        <h3>협력 체계</h3>
+        <p>팀/실장 협의체(월1회), 본부장 협의체(분기), 경영진 위원회(반기)</p>
+    </div>
+    <div class="guideline-section">
+        <h3>권한 관리</h3>
+        <p>각 계층별 명확한 권한과 책임 분배, 정보자산 접근권한 통제</p>
+    </div>
+    <div class="guideline-section">
+        <h3>보안 교육</h3>
+        <p>계층별 맞춤형 보안 교육 실시 (월 1회 이상)</p>
+    </div>
+    <br/><br/>
+    <h2>자주 묻는 질문 (FAQ)</h2>
+    <div class="faq-item">
+        <div class="faq-question">
+            (주)세진의 정보자산 관리 조직 체계는 어떻게 구성되어 있으며, 각 계층의 주요 책임은 무엇인가요?
+        </div>
+        <div class="faq-answer">
+            (주)세진의 정보자산 관리 조직 체계는 7단계의 계층 구조로 구성되며, 상위에서 하위로 보고 및 통제 관계를 가집니다. 주요 책임은 다음과 같습니다:
+            
+            <ol>
+                <li><strong>1단계: 대표이사 (CEO)</strong><br>
+                전사 정보보안 정책 최종 승인 및 자원 할당, 정보보호 예산 승인, 중요 보안정책 의사결정, 보안 사고 최종 책임</li>
+                
+                <li><strong>2단계: 부사장 / 정보보호최고책임자 (CISO)</strong><br>
+                전사 정보자산 관리 운영 총괄 및 본부 간 협력 조정 (부사장), 정보보호 전략 수립 및 조직/예산 운영 총괄 (CISO), 정보보호 계획 수립, 보안 감사 및 위험평가 총괄, 보안 사고 대응 총괄</li>
+                
+                <li><strong>3단계: 정보보호 담당자 (관리/물리/기술) / 본부장 (본부정보자산책임자)</strong><br>
+                정보보호 세부 정책 수립 및 실행, 영역별 통제 운영, 보안 솔루션 운영, 시설 보안/출입 통제 (정보보호 담당자), 본부별 정보자산 관리 총괄, 본부 정책 수립, 부서 현황 점검, 보안 교육 계획 수립 (본부장)</li>
+                
+                <li><strong>4단계: 부서장 / 팀장 (부서 정보자산관리자)</strong><br>
+                부서 단위 정보자산 관리 감독, 부서 관리 계획 수립, 정보자산관리자/담당자 지정, 정책 시행 감독</li>
+                
+                <li><strong>5단계: 정보자산관리자</strong><br>
+                부서 정보자산 관리 실무 총괄, 정보자산 목록/등급 관리, 생명주기 및 접근권한 관리, 정기 점검 보고</li>
+                
+                <li><strong>6단계: 정보자산담당자</strong><br>
+                정보자산 식별/등록/변경 처리 및 1차 보안 점검, 신규 자산 등록, 변경사항 업데이트, 1차 사고 대응</li>
+                
+                <li><strong>7단계: 일반 사용자</strong><br>
+                정보자산 적절 사용 및 보안 정책 준수, 보안 절차 준수, 사고 발견 시 즉시 보고</li>
+            </ol>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="footer">
+    본 조직도는 정보자산 관리를 위한 전담 조직 구성을 나타냅니다.<br>
+    각 계층별 역할과 책임을 명확히 하여 효율적인 정보자산 관리를 도모합니다.
+</div>
+</div>
+
+</body><link rel="stylesheet" asset="eduser.css" href="chrome-extension://mjdbhokoopacimoekfgkcoogikbfgngb/assets/eduser.css"></html>
