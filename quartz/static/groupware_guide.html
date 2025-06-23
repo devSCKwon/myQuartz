@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* 햄버거 버튼 스타일 */
+        .hamburger-button {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 10px;
+            position: fixed; /* 화면에 고정 */
+            top: 10px; /* 상단 여백 */
+            left: 10px; /* 좌측 여백 */
+            z-index: 1001; /* 사이드바보다 위에 표시 */
+        }
+
         :root {
             --primary-color: #0052cc;
             --background-color: #f0f2f5;
@@ -30,6 +44,14 @@
             position: fixed;
             height: 100vh;
             overflow-y: auto;
+            transition: width 0.3s ease; /* 너비 변경 시 애니메이션 효과 */
+        }
+
+        /* 사이드바 숨김 스타일 */
+        .sidebar.hidden {
+            width: 0;
+            padding: 20px 0; /* 좌우 패딩 제거 */
+            overflow: hidden; /* 내용 숨기기 */
         }
 
         .sidebar h2 {
@@ -66,6 +88,12 @@
             margin-left: 270px; /* Sidebar width + padding */
             padding: 40px; /* Gutter */
             flex-grow: 1;
+            transition: margin-left 0.3s ease; /* 왼쪽 마진 변경 시 애니메이션 효과 */
+        }
+
+        /* 사이드바 숨김 시 메인 콘텐츠 확장 스타일 */
+        main.expanded {
+            margin-left: 20px; /* 사이드바 너비만큼 왼쪽 마진 축소 */
         }
 
         .hero-section {
@@ -256,7 +284,12 @@
     </style>
 </head>
 <body>
-    <aside class="sidebar">
+    <!-- 햄버거 버튼 -->
+    <button class="hamburger-button" id="hamburger-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
         <h2>그룹웨어 문서 관리</h2>
         <nav>
             <ul>
@@ -373,7 +406,28 @@
         </section>
     </main>
     <script>
+        // 사이드바 토글 기능을 위한 JavaScript
         document.addEventListener('DOMContentLoaded', () => {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('main');
+
+            hamburgerBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                mainContent.classList.toggle('expanded');
+
+                // 아이콘 변경 (햄버거 <-> X)
+                const icon = hamburgerBtn.querySelector('i');
+                if (sidebar.classList.contains('hidden')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // 기존 스크롤 기능 유지
             const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
             sidebarLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
