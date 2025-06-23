@@ -7,19 +7,28 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* 햄버거 버튼 스타일 */
+        /* 햄버거 버튼 스타일 (위치 고정 및 z-index 설정) */
         .hamburger-button {
             font-size: 24px;
             background: none;
             border: none;
             color: var(--primary-color);
             cursor: pointer;
-            padding: 10px;
-            position: fixed; /* 화면에 고정 */
-            top: 10px; /* 상단 여백 */
-            left: 10px; /* 좌측 여백 */
-            z-index: 1001; /* 사이드바보다 위에 표시 */
+            padding: 10px; /* 클릭 영역 확보 */
+            position: fixed;
+            top: 15px; /* 버튼을 위로 이동하여 제목과의 상하 간격 확보 */
+            left: 20px;
+            z-index: 1001;
         }
+
+        /* 사이드바 헤더 스타일 제거 또는 주석 처리 */
+        /*
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        */
 
         :root {
             --primary-color: #0052cc;
@@ -45,7 +54,8 @@
         .sidebar {
             width: 250px;
             background-color: #ffffff;
-            padding: 20px;
+            padding: 20px; /* 기본 패딩 */
+            padding-left: 70px; /* 햄버거 버튼을 위한 추가 좌측 패딩 */
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             position: fixed;
             height: 100%;
@@ -54,19 +64,23 @@
             flex-direction: column;
             gap: 15px;
             z-index: 1000;
-            transition: width 0.3s ease; /* 너비 변경 시 애니메이션 효과 */
+            transition: width 0.3s ease, padding-left 0.3s ease; /* padding-left 애니메이션 추가 */
         }
 
         /* 사이드바 숨김 스타일 */
         .sidebar.hidden {
             width: 0;
-            padding: 20px 0; /* 좌우 패딩 제거 */
+            padding-left: 0; /* 숨겨질 때 추가 패딩 제거 */
+            padding-top: 20px; /* 기존 상하 패딩 유지 또는 조정 */
+            padding-bottom: 20px;
+            padding-right: 0; /* 숨겨질 때 우측 패딩 제거 */
             overflow: hidden; /* 내용 숨기기 */
         }
 
         .sidebar h2 {
             color: var(--primary-color);
             font-size: 1.5em;
+            margin-top: 10px; /* 햄버거 버튼과의 상하 간격 확보 */
             margin-bottom: 20px;
             border-bottom: 2px solid var(--primary-color);
             padding-bottom: 10px;
@@ -101,7 +115,10 @@
 
         /* Main Content Area */
         main {
-            margin-left: 270px; /* sidebar width + padding */
+            /* 사이드바 너비(250px) + 사이드바의 새로운 padding-left(70px) + main의 자체 padding(40px) 중첩을 피하기 위해 조정 */
+            /* 실제로는 사이드바의 box-sizing과 전체 차지 너비를 고려해야 함. */
+            /* 사이드바가 250px width + 70px padding-left = 320px 점유 가정 */
+            margin-left: 310px; /* (250px + 70px) - main의 padding 40px 중 일부. 또는 calc(250px + 70px) */
             flex-grow: 1;
             padding: 40px; /* Sufficient gutter */
             display: flex;
@@ -112,7 +129,7 @@
 
         /* 사이드바 숨김 시 메인 콘텐츠 확장 스타일 */
         main.expanded {
-            margin-left: 20px; /* 사이드바 너비만큼 왼쪽 마진 축소 */
+            margin-left: 70px; /* 햄버거 버튼이 차지하는 공간 + 약간의 여백 (sidebar의 padding-left와 유사하게) */
         }
 
         section {
@@ -331,12 +348,13 @@
     </style>
 </head>
 <body>
-    <!-- 햄버거 버튼 -->
+    <!-- 햄버거 버튼 (사이드바 외부로 이동) -->
     <button class="hamburger-button" id="hamburger-btn">
         <i class="fas fa-bars"></i>
     </button>
 
     <aside class="sidebar" id="sidebar">
+        <!-- 사이드바 헤더 제거, h2 직접 사용 -->
         <h2>정보자산 위험관리</h2>
         <nav>
             <ul>
