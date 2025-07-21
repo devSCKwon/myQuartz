@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사내 문서 보안 강화 활동</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .hamburger-button {
+            display: none; /* 기본적으로 숨김 */
+        }
+
+        /* 데스크톱 화면용 햄버거 버튼 */
+        @media (min-width: 993px) {
+            .hamburger-button {
+                display: block;
+                font-size: 20px;
+                background: none;
+                border: none;
+                color: var(--header-text-color);
+                cursor: pointer;
+                padding: 15px;
+                position: fixed;
+                top: 10px;
+                left: 15px;
+                z-index: 1002;
+                transition: left 0.3s ease;
+                margin-bottom: 10px; /* Add margin to the bottom */
+            }
+
+            .sidebar.collapsed + main {
+                margin-left: 80px;
+            }
+            
+            .sidebar.collapsed .hamburger-button {
+                left: 15px;
+            }
+        }
+
+        /* 사이드바 축소 스타일 */
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed .sidebar-header h1,
+        .sidebar.collapsed .sidebar-header p,
+        .sidebar.collapsed .sidebar-nav span,
+        .sidebar.collapsed .sidebar-footer {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-nav li a {
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .sidebar-nav li a i {
+            margin-right: 0;
+        }
+        
+        main.expanded {
+            margin-left: 80px;
+        }
+        /* ------------------- */
+        /* 1. 디자인 시스템 (테마: Professional Blue) */
+        /* ------------------- */
+        :root {
+            --primary-color: #0052cc;
+            --primary-color-dark: #0040a3;
+            --background-color: #f4f5f7;
+            --text-color: #172b4d;
+            --text-color-light: #5e6c84;
+            --card-bg-color: #ffffff;
+            --border-color: #dfe1e6;
+            --header-bg-color: #0747a6;
+            --header-text-color: #ffffff;
+            --sidebar-width: 250px;
+        }
+
+        /* ------------------- */
+        /* 2. 기본 및 레이아웃 */
+        /* ------------------- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* ------------------- */
+        /* 3. 사이드바 내비게이션 */
+        /* ------------------- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--header-bg-color);
+            color: var(--header-text-color);
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .sidebar-header p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            margin-top: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--header-text-color);
+            font-weight: 500;
+            transition: background-color 0.3s, padding-left 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-nav li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .sidebar-nav li a.active {
+            background-color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .sidebar-nav li a i {
+            margin-right: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-footer {
+            padding: 1.5rem;
+            font-size: 0.8rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ------------------- */
+        /* 4. 메인 콘텐츠 영역 */
+        /* ------------------- */
+        main {
+            margin-left: 270px; /* Sidebar width + padding */
+            padding: 40px; /* Gutter */
+            flex-grow: 1;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-header {
+            margin-bottom: 2rem;
+        }
+        
+        .main-header h1 {
+            font-size: 2.2rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .main-header .meta {
+            color: var(--text-color-light);
+            font-size: 0.9rem;
+        }
+
+        /* ------------------- */
+        /* 5. 컴포넌트: 대분류 섹션 (Section) - UI 개선 */
+        /* ------------------- */
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section-header {
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        
+        .content-section-header i {
+            margin-right: 1rem;
+            font-size: 1.6rem;
+        }
+        
+        .content-section-header h2 {
+            margin: 0;
+        }
+
+        /* ------------------- */
+        /* 6. 컴포넌트: 카드(Card) */
+        /* ------------------- */
+        .card {
+            background-color: #fafbfc;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .card:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header h3 {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-body p {
+            margin-bottom: 1rem;
+        }
+
+        .card-body ul {
+            list-style-position: outside;
+            padding-left: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-body ul li {
+            margin-bottom: 0.75rem;
+            color: var(--text-color-light);
+        }
+        
+        .card-body ul li strong {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        /* ------------------- */
+        /* 7. 컴포넌트: 테이블(Table) */
+        /* ------------------- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: #FFFFFF; /* 강제 지정: 배경과 대비 */
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* ------------------- */
+        /* 8. 기타 유틸리티 */
+        /* ------------------- */
+        .highlight {
+            background-color: #deebff;
+            color: var(--primary-color-dark);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+
+        /* ------------------- */
+        /* 9. 반응형 디자인 */
+        /* ------------------- */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            main {
+                width: 100%;
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+            .content-section-header {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="hamburger-button" id="hamburger-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#">
+                <h1>사내 문서 보안 강화</h1>
+                <p>전사 정보 자산 보호</p>
+            </a>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="#groupware" class="nav-link active"><i class="fas fa-file-signature"></i> <span>그룹웨어 기안 서식</span></a></li>
+            <li><a href="#mail" class="nav-link"><i class="fas fa-shield-halved"></i> <span>사내 메일 보안</span></a></li>
+            <li><a href="#sharing" class="nav-link"><i class="fas fa-share-alt"></i> <span>문서 공유 가이드</span></a></li>
+        </ul>
+        <div class="sidebar-footer">
+            © 2025 경영지원본부 전산팀.
+        </div>
+    </nav>
+
+    <main id="main-content">
+            <header class="main-header">
+                <h1>사내 문서 보안 강화 활동</h1>
+                <p class="meta">시행일: <strong>2025년 7월 21일(월)</strong></p>
+            </header>
+
+            <!-- 1. 그룹웨어 기안 서식 강화 -->
+            <section id="groupware" class="content-section">
+                <div class="content-section-header">
+                    <i class="fas fa-file-signature"></i>
+                    <h2>그룹웨어 기안 서식 변경</h2>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>배경 및 목적</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>목적:</strong> 전사적인 문서 보안 수준을 한 단계 높이고, 문서 관리 체계를 표준화하여 회사의 정보 자산을 더욱 체계적이고 안전하게 보호하고자 함.</li>
+                            <li><strong>주요 변경 사항:</strong> 기존에 가장 보편적으로 사용되던 '일반 기안지'를 비활성화하고, 문서의 중요도에 따라 보안 등급 설정이 의무화된 신규 서식 2종을 도입함.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>주요 변경 내용: AS-IS → TO-BE</h3>
+                    </div>
+                    <div class="card-body table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>구분</th>
+                                    <th>AS-IS (기존)</th>
+                                    <th><strong>TO-BE (변경 후)</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>기안 서식</strong></td>
+                                    <td>'일반 기안지' 서식을 통해 모든 일반/대외비 문서 작성</td>
+                                    <td>기존 '일반 기안지' 서식 사용 <strong>비활성화</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>보안 설정</strong></td>
+                                    <td>별도의 보안 등급 설정 절차 없음</td>
+                                    <td>기안 시 <strong>보안 등급(일반, 대외비, 비밀) 설정 의무화</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>기안 방식</strong></td>
+                                    <td>단일 서식 사용</td>
+                                    <td>모든 기안 업무는 신규 '문서등급 기안지' 2종을 목적에 맞게 사용</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>신규 보안 서식 사용 안내</h3>
+                    </div>
+                    <div class="card-body table-container">
+                        <p><strong>2025년 7월 21일(월)부터</strong> 모든 기안은 아래의 신규 서식 2종 중 목적에 맞는 서식을 선택하여 작성해야 함.</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>구분</th>
+                                    <th>문서등급 (대외비) 기안지</th>
+                                    <th>문서등급 (비밀) 기안지</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>주요 용도</strong></td>
+                                    <td>기존 '일반 기안지'의 모든 업무 대체 (<strong>일반, 대외비</strong> 문서 작성)</td>
+                                    <td>'<strong>비밀</strong>' 등급 문서 작성 전용</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>작성 방법</strong></td>
+                                    <td>'보안 등급' 필드에서 '<strong>대외비</strong>' 또는 '<strong>일반</strong>' 선택</td>
+                                    <td>'보안 등급' 필드에서 '<strong>비밀</strong>' 등급만 선택 가능</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>보안 특징</strong></td>
+                                    <td>기존과 동일</td>
+                                    <td><strong>결재자를 제외한 수신/공유/재공유 기능 원천 차단</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>내용 공유</strong></td>
+                                    <td>수신, 참조, 공유 기능 사용 가능</td>
+                                    <td>내용 공유 필요 시, '<strong>참조</strong>' 기능을 통해 <strong>결재 라인에 직접 추가</strong>하는 방식만 가능</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>임직원 요청 사항</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>시행일:</strong> <span class="highlight">2025년 7월 21일(월)부터</span> 모든 기안 업무 시, 반드시 상기 신규 서식 2종 사용.</li>
+                            <li><strong>작성자:</strong> 문서의 민감도를 신중하게 판단하여 적절한 비밀등급 지정 필요.</li>
+                            <li><strong>결재자:</strong> 문서의 민감도를 최종 판단하고, 등급이 잘못 지정된 경우 반려하여 올바른 등급으로 재작성하도록 안내.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. 사내 메일 보안 강화 -->
+            <section id="mail" class="content-section">
+                <div class="content-section-header">
+                    <i class="fas fa-shield-halved"></i>
+                    <h2>사내 메일 보안 강화</h2>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>메일 보안 등급 종류</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>사내 메일 발송 시, 관리자가 설정한 보안 등급(<strong>일반, 대외비, 기밀</strong>)을 선택하여 중요한 메일을 안전하게 전송 가능.</li>
+                            <li>보안등급이 메일 상단에 표기되며, 등급에 따라 지정된 보안 문구가 바닥글에 자동 반영됨.</li>
+                            <li>(예: <span class="highlight">- 기밀 / 본 문서는 ㈜세진의 내부문서이며, 외부유출 및 재전송을 금합니다.</span>)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>'대외비' 및 '기밀' 등급 메일 특징</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>외부 발송 불가:</strong> '대외비' 또는 '기밀' 등급으로 설정된 메일은 <strong>외부 주소로 발송이 불가능함</strong>.</li>
+                            <li><strong>보안 설정 유지:</strong> 해당 등급의 메일을 회신/전달 시, 기존 보안 등급, 유효 기간, 재전송 금지 옵션을 <strong>임의로 수정하거나 삭제할 수 없음</strong>.</li>
+                            <li><strong>유효 기간 설정:</strong> 메일 유효 기간(하루/일주일/1개월) 설정 가능하며. 유효 기간 만료 시 메일은 <strong>받은 사람의 메일함에서 자동으로 삭제</strong>되어 열람 불가능.</li>
+                            <li><strong>재전송 금지:</strong> '대외비' 등급은 재전송 금지를 옵션 선택 가능, '기밀' 등급은 <strong>옵션 선택과 관계없이 재전송 기능이 원천 차단됨</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 그룹웨어 문서 공유 및 보안 관리 가이드 -->
+            <section id="sharing" class="content-section">
+                <div class="content-section-header">
+                    <i class="fas fa-share-alt"></i>
+                    <h2>문서 공유 및 보안 관리 가이드</h2>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>문서 공유 기본 원칙</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>문서의 민감도와 활용 목적에 따라 열람 권한과 공유 방식을 설정하는 것이 중요함.</li>
+                            <li>작성자는 문서 내용을 조회할 수 있는 대상을 명확히 인지하고 적절한 공유 방법을 선택해야 함.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>문서 열람/공유 방법 및 특징</h3>
+                    </div>
+                    <div class="card-body table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>방법</th>
+                                    <th>설명</th>
+                                    <th>예시</th>
+                                    <th>특이사항</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>결재라인 (참조)</strong></td>
+                                    <td>기안 or 결재권자에 의해 참조자로 지정된 사용자는 결재선에 포함되어 열람 가능</td>
+                                    <td>그룹웨어 극비/대외비 샘플 서식, 영업비밀 등급 자체확인 서식</td>
+                                    <td>결재라인에 존재하나 별도 승인 절차 없음</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>열람문서 기능</strong></td>
+                                    <td>서식 내 열람 권한 내장. 결재라인 외에도 열람 가능</td>
+                                    <td>지출품의서 (재경부 확인 목적)</td>
+                                    <td>결재문서 리포트 통계 활용 시 열람 권한 필수</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>문서공유</strong></td>
+                                    <td>특정 부서 또는 사용자에게 문서 직접 공유</td>
+                                    <td>작성부서의 정책안내문을 타부서에 공유</td>
+                                    <td>실시간 협업에 적합, 공유 시점 및 범위 통제 가능</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>수신함 지정</strong></td>
+                                    <td>결재선과 무관하게 업무 수행자(팀 또는 개인) 지정 가능</td>
+                                    <td>협조전 수신 → 재기안 필요, 팀 단위 수신 시 담당자 지정</td>
+                                    <td>수신자별 완료 이력 기록 가능</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>지속적인 보안 강화 계획</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>기능 확대:</strong> 공용 서식 내 '비밀' 등급 문서의 보안 강화를 위한 기능 점진적 고도화.</li>
+                            <li><strong>권한 체계 수립:</strong> 서식 유형 및 직무(Role-Based) 기반 명확한 권한 체계 수립으로 불필요한 접근 원천 차단. 또한, <strong>열람/공유/수정 등 모든 활동 이력에 대한</strong> 책임 소재 명확화.</li>
+                            <li><strong>가이드 및 교육 제공:</strong> '결재선 이해하기' 등 관련 가이드 지속 제공으로 임직원 보안 의식 제고.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // DOM이 완전히 로드된 후 스크립트 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+
+            if (hamburgerBtn && sidebar && mainContent) {
+                hamburgerBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('collapsed');
+                    mainContent.classList.toggle('expanded');
+                });
+            }
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main .content-section');
+
+            // Null-Safe DOM Access
+            if (!navLinks.length || !sections.length) {
+                console.error("Navigation links or sections not found.");
+                return;
+            }
+
+            // 스크롤에 따라 활성 내비게이션 링크 업데이트
+            const onScroll = () => {
+                let currentSectionId = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 100) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href');
+                    if (href && currentSectionId && href.includes(currentSectionId)) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+
+            // 스크롤 이벤트 리스너 추가
+            window.addEventListener('scroll', onScroll);
+
+            // 초기 로드 시 한 번 실행하여 올바른 링크 활성화
+            onScroll();
+        });
+    </script>
+</body>
+</html>
