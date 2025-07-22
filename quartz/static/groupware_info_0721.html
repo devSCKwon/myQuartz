@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사내 문서 보안 강화 활동</title>
+    <title>전자문서 보안등급 가이드</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -318,6 +318,100 @@
             font-weight: 600;
         }
         
+        /* ------------------- */
+        /* 8a. 컴포넌트: 이미지 갤러리 및 모달 */
+        /* ------------------- */
+        .image-gallery {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .gallery-item {
+            text-align: center;
+        }
+
+        .gallery-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: #e9ecef; /* Placeholder background */
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .gallery-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .gallery-caption {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-color-light);
+            width: 150px;
+            word-wrap: break-word;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            padding-top: 60px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 90vw;
+            max-height: 90vh;
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            height: 150px;
+        }
+
+        @keyframes zoom {
+            from {transform: scale(0.1)}
+            to {transform: scale(1)}
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
         /* ------------------- */
         /* 9. 반응형 디자인 */
@@ -345,8 +439,8 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="#">
-                <h1>사내 문서 보안 강화</h1>
-                <p>전사 정보 자산 보호</p>
+                <h1>전자 문서 보안 강화</h1>
+                <p>전자문서 보안등급 설정</p>
             </a>
         </div>
         <ul class="sidebar-nav">
@@ -361,7 +455,8 @@
 
     <main id="main-content">
             <header class="main-header">
-                <h1>사내 문서 보안 강화 활동</h1>
+                <h1>전자 문서 보안 강화</h1>
+                <h3>사내 문서 보안을 위한 전자문서 보안등급 설정 사용자 가이드</h3>
                 <p class="meta">시행일: <strong>2025년 7월 21일(월)</strong></p>
             </header>
 
@@ -369,7 +464,7 @@
             <section id="groupware" class="content-section">
                 <div class="content-section-header">
                     <i class="fas fa-file-signature"></i>
-                    <h2>그룹웨어 기안 서식 변경</h2>
+                    <h2>그룹웨어 기안 서식 보안등급 설정</h2>
                 </div>
                 
                 <div class="card">
@@ -470,13 +565,33 @@
                         </ul>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>첨부 이미지</h3>
+                    </div>
+                    <div class="card-body image-gallery">
+                        <div class="gallery-item">
+                            <img src="./image/doc3.png" alt="문서서식 목록" class="gallery-image">
+                            <div class="gallery-caption">문서서식 목록</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="./image/doc1.png" alt="대외문 기안지" class="gallery-image">
+                            <div class="gallery-caption">대외문 기안지</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="./image/doc2.png" alt="비밀 기안지" class="gallery-image">
+                            <div class="gallery-caption">비밀 기안지</div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- 2. 사내 메일 보안 강화 -->
             <section id="mail" class="content-section">
                 <div class="content-section-header">
                     <i class="fas fa-shield-halved"></i>
-                    <h2>사내 메일 보안 강화</h2>
+                    <h2>사내 메일 보안 등급 설정</h2>
                 </div>
                 <div class="card">
                     <div class="card-header">
@@ -503,6 +618,32 @@
                         </ul>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>첨부 이미지</h3>
+                    </div>
+                    <div class="card-body image-gallery">
+                        <div class="gallery-item">
+                            <img src="./image/email1.png" alt="Email 보안등급 설정" class="gallery-image">
+                            <div class="gallery-caption">Email 보안등급 설정</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="./image/email7.png" alt="Email 대외비/기밀설정" class="gallery-image">
+                            <div class="gallery-caption">Email 대외비/기밀설정</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="./image/email2-2.png" alt="보안메일 외부전송차단" class="gallery-image">
+                            <div class="gallery-caption">보안메일 외부전송차단</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="./image/email3-5.png" alt="보안메일 바닥글설정" class="gallery-image">
+                            <div class="gallery-caption">보안메일 바닥글설정</div>
+                        </div>
+
+                    </div>
+                </div>
+                
             </section>
 
             <!-- 3. 그룹웨어 문서 공유 및 보안 관리 가이드 -->
@@ -581,6 +722,13 @@
         </main>
     </div>
 
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
     <script>
         // DOM이 완전히 로드된 후 스크립트 실행
         document.addEventListener('DOMContentLoaded', function() {
@@ -629,6 +777,38 @@
 
             // 초기 로드 시 한 번 실행하여 올바른 링크 활성화
             onScroll();
+
+            // 이미지 모달 스크립트
+            const modal = document.getElementById("imageModal");
+            if (modal) {
+                const modalImg = document.getElementById("modalImage");
+                const captionText = document.getElementById("caption");
+                const galleryImages = document.querySelectorAll(".gallery-image");
+                const span = modal.querySelector(".close");
+
+                galleryImages.forEach(img => {
+                    img.addEventListener('click', () => {
+                        // src가 비어있지 않고, 현재 페이지 URL이 아닌 경우에만 모달 표시
+                        if (img.getAttribute('src') && img.getAttribute('src').trim() !== '') {
+                            modal.style.display = "block";
+                            modalImg.src = img.src;
+                            captionText.innerHTML = img.alt;
+                        }
+                    });
+                });
+
+                if (span) {
+                    span.onclick = function() {
+                        modal.style.display = "none";
+                    }
+                }
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            }
         });
     </script>
 </body>
