@@ -471,19 +471,24 @@
                     <h3>사고 발생 개요</h3>
                 </div>
                 <div class="card-body">
-                    <p>최근 사내 임직원 메일계정이 외부에서 무단 접속되어 스팸메일 발송에 악용된 사례가 확인되었습니다. <br>외부 IP에서 해당 계정으로 총 1,000건의 스팸메일이 2회에 걸쳐 발송되었으며, 로그인 후 세금계산서 전송과 같은 내용으로 스팸메일을 발송한 것으로 확인되었습니다.</p>
-                    <p>다음은 실제 사고사례입니다:</p>
+                    <p><strong>외부에서 사내 임직원 메일계정이 스팸메일 발송에 악용되어, 회사도메인 차단</strong></p>
                     <ul>
-                        <li><strong>2025년 5월 22일:</strong> 품질보증팀 책임매니저 계정 - 외부아이피를 통한 아이디 / 패스워드 웹 접속 후 스팸메일 발송</li>
-                        <li><strong>2025년 7월 15일:</strong> 외주관리팀 책임매니저 계정 - 외부아이피를 통한 아이디 / 패스워드 웹 접속 후 스팸메일 발송</li>
-                        <li><strong>2025년 8월 5일:</strong> 물류팀 책임매니저 계정 - 외부아이피를 통한 아이디 / 패스워드 웹 접속 후 스팸메일 발송</li>
+                        <li>외부 IP에서 취약한 사용자 계정으로 로그인을 시도하여, 로그인이 성공한 뒤 사내메일로 피싱메일 발송에 이용되었습니다.</li>
+                        <li>APT 방어차단 회피 목적으로 여러차례 분할하여 발송되었으며, 로그인 후 사용자 사칭 및 세금계산서 전송과 같은 내용으로 스팸메일을 발송한 것으로 확인되었습니다.</li>
+                    </ul>
+
+                    <p><strong>실제 사고사례</strong></p>
+                    <ul>
+                        <li><strong>2025년 5월 22일:</strong> 품질보증팀 책임매니저 계정 - 외부아이피를 통한 아이디 / 패스워드 웹 접속 : 사용자 사칭(사용자명 변경) 스팸메일 발송</li>
+                        <li><strong>2025년 7월 15일:</strong> 외주관리팀 책임매니저 계정 - 외부아이피를 통한 아이디 / 패스워드 웹 접속 : 사용자 사칭(사용자명 변경) 및 당사정보 이용(메일 제목) 스팸메일 발송</li>
+                        <li><strong>2025년 8월 5일:</strong> 물류팀 책임매니저 계정 - 외부아이피를 통한 아이디 / 패스워드 웹 접속 : 당사정보 이용(사용자명 이용)한 세금계산서(악성웨어 첨부) 스팸메일 발송</li>
                     </ul>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h3>발생 사고사례 첨부</h3>
+                    <h3>2025년 사고 사례 공유</h3>
                 </div>
                 <div class="card-body image-gallery">
                     <div class="gallery-item">
@@ -496,7 +501,7 @@
                     </div>
                     <div class="gallery-item">
                         <img src="./image/warning3.png" alt="외부기관 세금계산서 사칭" class="gallery-image">
-                        <div class="gallery-caption">외부기관 세금계산서 사칭</div>
+                        <div class="gallery-caption">사칭 후 세금계산서(악성웨어)첨부</div>
                     </div>
 
                 </div>
@@ -619,6 +624,10 @@
                             <div class="gallery-item">
                                 <img src="./image/login_lnfo.png" alt="접속현황 확인방법" class="gallery-image">
                                 <div class="gallery-caption">접속현황 확인방법</div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="./image/incident.png" alt="비정상접속 의심사례" class="gallery-image">
+                                <div class="gallery-caption">비정상접속 의심사례</div>
                             </div>
                         </div>                        
                         <li>의심스러운 메일 수신 시 링크 클릭이나 첨부파일 실행을 금지합니다.</li>
