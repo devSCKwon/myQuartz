@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>영어 단어 학습</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 25px 20px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 26px;
+        }
+        
+        .progress {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        
+        .word-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px 20px;
+            margin: 15px 0;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .word-english {
+            font-size: clamp(36px, 10vw, 48px);
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 18px;
+            transition: all 0.3s ease;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            will-change: filter;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        
+        .word-english.blurred {
+            filter: blur(12px);
+            -webkit-filter: blur(12px);
+            opacity: 0.7;
+        }
+        
+        .word-english.revealed {
+            filter: blur(0);
+            -webkit-filter: blur(0);
+            opacity: 1;
+        }
+        
+        .word-pronunciation {
+            font-size: clamp(20px, 5vw, 24px);
+            color: #718096;
+            margin-bottom: 12px;
+            font-style: italic;
+            transition: all 0.3s ease;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            will-change: filter;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        
+        .word-pronunciation.blurred {
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+            opacity: 0.7;
+        }
+        
+        .word-pronunciation.revealed {
+            filter: blur(0);
+            -webkit-filter: blur(0);
+            opacity: 1;
+        }
+        
+        .word-meaning {
+            font-size: clamp(22px, 6vw, 28px);
+            color: #4a5568;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        .wrong-check {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0 12px 0;
+            font-size: 17px;
+            padding: 8px;
+        }
+        
+        .wrong-check input[type="checkbox"] {
+            width: 26px;
+            height: 26px;
+            margin-right: 10px;
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+        
+        .wrong-check label {
+            cursor: pointer;
+            color: #e53e3e;
+            font-weight: bold;
+            user-select: none;
+        }
+        
+        .button-container {
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .speak-button, .reveal-button {
+            width: 100%;
+            max-width: 300px;
+            color: white;
+            border: none;
+            padding: 16px 28px;
+            font-size: 17px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            touch-action: manipulation;
+        }
+        
+        .speak-button {
+            background: #48bb78;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+        }
+        
+        .speak-button:active {
+            background: #38a169;
+            transform: scale(0.98);
+        }
+        
+        .reveal-button {
+            background: #f6ad55;
+            box-shadow: 0 4px 15px rgba(246, 173, 85, 0.4);
+        }
+        
+        .reveal-button:active {
+            background: #ed8936;
+            transform: scale(0.98);
+        }
+        
+        .reveal-button.active {
+            background: #dd6b20;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 18px;
+        }
+        
+        .nav-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 18px;
+            font-size: 17px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            font-weight: 600;
+            touch-action: manipulation;
+        }
+        
+        .nav-button:active {
+            background: #5568d3;
+            transform: scale(0.98);
+        }
+        
+        .nav-button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .retry-button, .restart-button {
+            width: 100%;
+            max-width: 300px;
+            color: white;
+            border: none;
+            padding: 17px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px auto;
+            display: block;
+            font-weight: 600;
+            touch-action: manipulation;
+        }
+        
+        .retry-button {
+            background: #e53e3e;
+        }
+        
+        .retry-button:active {
+            background: #c53030;
+            transform: scale(0.98);
+        }
+        
+        .restart-button {
+            background: #667eea;
+        }
+        
+        .restart-button:active {
+            background: #5568d3;
+            transform: scale(0.98);
+        }
+        
+        .completion-message {
+            background: #c6f6d5;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 20px;
+            color: #22543d;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+        
+        /* 모바일 최적화 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .header {
+                margin-bottom: 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+                margin-bottom: 6px;
+            }
+            
+            .progress {
+                font-size: 17px;
+                margin-bottom: 10px;
+            }
+            
+            .word-card {
+                padding: 20px 15px;
+                margin: 12px 0;
+                min-height: 160px;
+            }
+            
+            .word-english {
+                margin-bottom: 15px;
+            }
+            
+            .word-pronunciation {
+                margin-bottom: 10px;
+            }
+            
+            .word-meaning {
+                margin-top: 12px;
+            }
+            
+            .wrong-check {
+                margin: 12px 0 10px 0;
+                font-size: 16px;
+                padding: 6px;
+            }
+            
+            .wrong-check input[type="checkbox"] {
+                width: 24px;
+                height: 24px;
+                margin-right: 8px;
+            }
+            
+            .button-container {
+                gap: 8px;
+                margin: 12px 0;
+            }
+            
+            .speak-button, .reveal-button {
+                padding: 15px 25px;
+                font-size: 16px;
+            }
+            
+            .nav-button {
+                padding: 14px 16px;
+                font-size: 16px;
+            }
+            
+            .nav-buttons {
+                margin-top: 15px;
+            }
+        }
+        
+        /* 작은 모바일 기기 */
+        @media (max-width: 360px) {
+            .container {
+                padding: 18px 12px;
+            }
+            
+            .word-card {
+                padding: 18px 12px;
+                min-height: 150px;
+            }
+            
+            .button-container {
+                gap: 7px;
+            }
+            
+            .speak-button, .reveal-button {
+                padding: 14px 22px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>영어 단어 학습</h1>
+            <div class="progress">
+                <span id="current">1</span> / <span id="total">13</span>
+            </div>
+        </div>
+        
+        <div id="quizArea">
+            <div class="word-card">
+                <div class="word-english blurred" id="word"></div>
+                <div class="word-pronunciation blurred" id="pronunciation"></div>
+                <div class="word-meaning" id="meaning"></div>
+            </div>
+            
+            <div class="wrong-check">
+                <input type="checkbox" id="wrongCheckbox">
+                <label for="wrongCheckbox">❌ 틀린 문제로 표시</label>
+            </div>
+            
+            <div class="button-container">
+                <button class="speak-button" id="speakBtn">🔊 발음 듣기</button>
+                <button class="reveal-button" id="revealBtn">👁️ 영어단어 보기</button>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-button" id="prevBtn">◀ 이전</button>
+                <button class="nav-button" id="nextBtn">다음 ▶</button>
+            </div>
+        </div>
+        
+        <div id="completionArea" style="display: none;">
+            <div class="completion-message">
+                🎉 모든 문제를 완료했습니다!<br>
+                틀린 문제 개수: <span id="wrongCount">0</span>개
+            </div>
+            <button class="retry-button" id="retryBtn" style="display: none;">틀린 문제만 다시 풀기</button>
+            <button class="restart-button" id="restartBtn">처음부터 다시 시작</button>
+        </div>
+    </div>
+
+    <script>
+        // 단어 목록 (13개)
+        const masterVocabulary = [
+            { word: 'snack', pronunciation: '/snæk/', meaning: '간식' },
+            { word: 'grill', pronunciation: '/ɡrɪl/', meaning: '석쇠, 굽다' },
+            { word: 'shop', pronunciation: '/ʃɑːp/', meaning: '가게' },
+            { word: 'clock', pronunciation: '/klɑːk/', meaning: '시계' },
+            { word: 'wren', pronunciation: '/ren/', meaning: '굴뚝새' },
+            { word: 'witch', pronunciation: '/wɪtʃ/', meaning: '마녀' },
+            { word: 'hockey', pronunciation: '/ˈhɑːki/', meaning: '하키' },
+            { word: 'float', pronunciation: '/floʊt/', meaning: '뜨다, 떠다니다' },
+            { word: 'night', pronunciation: '/naɪt/', meaning: '밤' },
+            { word: 'girl', pronunciation: '/ɡɜːrl/', meaning: '소녀' },
+            { word: 'lawn', pronunciation: '/lɔːn/', meaning: '잔디밭' },
+            { word: 'fruit', pronunciation: '/fruːt/', meaning: '과일' },
+            { word: 'stew', pronunciation: '/stuː/', meaning: '스튜, 찌개' }
+        ];
+
+        let vocabulary = [];
+        let wrongAnswers = [];
+        let currentIndex = 0;
+        let isWordRevealed = false;
+
+        // 요소 가져오기
+        const wordEl = document.getElementById('word');
+        const pronunciationEl = document.getElementById('pronunciation');
+        const meaningEl = document.getElementById('meaning');
+        const currentEl = document.getElementById('current');
+        const totalEl = document.getElementById('total');
+        const speakBtn = document.getElementById('speakBtn');
+        const revealBtn = document.getElementById('revealBtn');
+        const wrongCheckbox = document.getElementById('wrongCheckbox');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const quizArea = document.getElementById('quizArea');
+        const completionArea = document.getElementById('completionArea');
+        const wrongCountEl = document.getElementById('wrongCount');
+        const retryBtn = document.getElementById('retryBtn');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // Fisher-Yates 셔플 알고리즘
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // 퀴즈 초기화
+        function initQuiz(isRetry = false) {
+            if (isRetry) {
+                vocabulary = shuffleArray(wrongAnswers);
+            } else {
+                vocabulary = shuffleArray([...masterVocabulary]);
+            }
+            
+            wrongAnswers = [];
+            currentIndex = 0;
+            
+            totalEl.textContent = vocabulary.length;
+            quizArea.style.display = 'block';
+            completionArea.style.display = 'none';
+            
+            displayWord();
+        }
+
+        // 블러 적용 함수
+        function applyBlur() {
+            wordEl.classList.remove('revealed');
+            wordEl.classList.add('blurred');
+            pronunciationEl.classList.remove('revealed');
+            pronunciationEl.classList.add('blurred');
+            
+            // Safari iOS 강제 리렌더링
+            wordEl.style.display = 'none';
+            pronunciationEl.style.display = 'none';
+            void wordEl.offsetHeight;
+            wordEl.style.display = '';
+            pronunciationEl.style.display = '';
+        }
+
+        // 블러 제거 함수
+        function removeBlur() {
+            wordEl.classList.remove('blurred');
+            wordEl.classList.add('revealed');
+            pronunciationEl.classList.remove('blurred');
+            pronunciationEl.classList.add('revealed');
+            
+            // Safari iOS 강제 리렌더링
+            wordEl.style.display = 'none';
+            pronunciationEl.style.display = 'none';
+            void wordEl.offsetHeight;
+            wordEl.style.display = '';
+            pronunciationEl.style.display = '';
+        }
+
+        // 단어 표시 함수
+        function displayWord() {
+            const currentWord = vocabulary[currentIndex];
+            wordEl.textContent = currentWord.word;
+            pronunciationEl.textContent = currentWord.pronunciation;
+            meaningEl.textContent = currentWord.meaning;
+            currentEl.textContent = currentIndex + 1;
+
+            // 블러 초기화
+            isWordRevealed = false;
+            applyBlur();
+            revealBtn.textContent = '👁️ 영어단어 보기';
+            revealBtn.classList.remove('active');
+            
+            // 틀린 문제 체크박스 초기화
+            wrongCheckbox.checked = false;
+
+            // 버튼 활성화/비활성화
+            prevBtn.disabled = currentIndex === 0;
+            
+            if (currentIndex === vocabulary.length - 1) {
+                nextBtn.textContent = '완료 ✓';
+            } else {
+                nextBtn.textContent = '다음 ▶';
+            }
+
+            // 자동으로 발음 재생
+            setTimeout(() => {
+                speakWord();
+            }, 300);
+        }
+
+        // 음성 재생 함수 (미국식 영어)
+        function speakWord() {
+            // 기존 음성 중단
+            speechSynthesis.cancel();
+            
+            const word = vocabulary[currentIndex].word;
+            const utterance = new SpeechSynthesisUtterance(word);
+            
+            // 미국식 영어 음성 찾기
+            const voices = speechSynthesis.getVoices();
+            const usVoice = voices.find(voice => 
+                voice.lang === 'en-US' || voice.lang.startsWith('en-US')
+            );
+            
+            if (usVoice) {
+                utterance.voice = usVoice;
+            }
+            
+            utterance.lang = 'en-US';
+            utterance.rate = 0.8;
+            utterance.pitch = 1.0;
+            
+            speechSynthesis.speak(utterance);
+        }
+
+        // 영어 단어 및 발음기호 보기/숨기기 토글 함수
+        function toggleWordVisibility() {
+            isWordRevealed = !isWordRevealed;
+            
+            if (isWordRevealed) {
+                removeBlur();
+                revealBtn.textContent = '🙈 영어단어 숨기기';
+                revealBtn.classList.add('active');
+            } else {
+                applyBlur();
+                revealBtn.textContent = '👁️ 영어단어 보기';
+                revealBtn.classList.remove('active');
+            }
+        }
+
+        // 틀린 문제 저장
+        function saveWrongAnswer() {
+            if (wrongCheckbox.checked) {
+                wrongAnswers.push(vocabulary[currentIndex]);
+            }
+        }
+
+        // 다음 문제로 이동 또는 완료
+        function moveNext() {
+            saveWrongAnswer();
+            
+            if (currentIndex < vocabulary.length - 1) {
+                currentIndex++;
+                displayWord();
+            } else {
+                showCompletion();
+            }
+        }
+
+        // 이전 문제로 이동
+        function movePrev() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayWord();
+            }
+        }
+
+        // 완료 화면 표시
+        function showCompletion() {
+            quizArea.style.display = 'none';
+            completionArea.style.display = 'block';
+            wrongCountEl.textContent = wrongAnswers.length;
+            
+            if (wrongAnswers.length > 0) {
+                retryBtn.style.display = 'block';
+            } else {
+                retryBtn.style.display = 'none';
+            }
+        }
+
+        // 음성 목록 로드
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => {
+                speechSynthesis.getVoices();
+            };
+        }
+
+        // 이벤트 리스너
+        speakBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            speakWord();
+        });
+        
+        revealBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleWordVisibility();
+        });
+
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            movePrev();
+        });
+        
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveNext();
+        });
+
+        retryBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            initQuiz(true);
+        });
+
+        restartBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            initQuiz(false);
+        });
+
+        // 키보드 단축키 (데스크톱용)
+        document.addEventListener('keydown', (e) => {
+            if (quizArea.style.display === 'none') return;
+            
+            if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                movePrev();
+            } else if (e.key === 'ArrowRight') {
+                moveNext();
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                speakWord();
+            }
+        });
+
+        // 초기 퀴즈 시작
+        initQuiz(false);
+    </script>
+</body>
+</html>
