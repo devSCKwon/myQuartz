@@ -7,7 +7,7 @@ article {
     margin-top: 1.9rem;
     margin-bottom: 1rem;
 
-    + p {
+    +p {
       margin-left: 1rem;
     }
   }
@@ -18,7 +18,7 @@ article {
     margin-bottom: 1rem;
     margin-left: 1rem;
 
-    + p {
+    +p {
       margin-left: 1.5rem;
     }
   }
@@ -29,18 +29,30 @@ article {
     margin-bottom: 0.8rem;
     margin-left: 1.5rem;
 
-    + p {
+    +p {
       margin-left: 2rem;
+    }
+  }
+
+  h5 {
+    font-size: 1rem;
+    margin-top: 1.1rem;
+    margin-bottom: 0.7rem;
+    margin-left: 2rem;
+
+    // h5 바로 뒤에 오는 문단(p), 순서 있는 리스트(ol), 순서 없는 리스트(ul) 들여쓰기
+    +p,
+    +ol,
+    +ul {
+      margin-left: 2.5rem;
     }
   }
 
   // article 내의 모든 figure에 적용하고 싶을 경우
   figure {
     margin-left: 1.5rem !important;
-  }  
-}
-
-article ol {
+  }
+}article ol {
   margin-left: 0.5rem;
 }
 
