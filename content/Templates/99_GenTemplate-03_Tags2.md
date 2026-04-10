@@ -1,9 +1,7 @@
----
-draft: "true"
----
+
 <%*
 // --- 설정 (반드시 수정하세요) ---
-const GEMINI_API_KEY = "AIzaSyCCoze6KsMZOIyDQ75tkw63Q_ug8vzi7Tk"; 
+const GEMINI_API_KEY = "AIzaSyBplun227bPBEtAugTSZvs5oFZt8yhQFpM"; 
 const GEMINI_MODEL = "gemini-flash-lite-latest";
 
 // --- 프롬프트 설정 ---
