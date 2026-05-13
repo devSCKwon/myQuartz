@@ -13,6 +13,7 @@ date created: 금요일, 10월 6일 2023, 4:42:49 오후
 date modified: 화요일, 3월 24일 2026, 2:59:06 오후
 title: 32_물리보안 - CCTV운영 및 시설감시지침
 rev: "7"
+draft: "true"
 ---
 
 # 제 8 장 물리보안 - CCTV운영 및 시설감시 지침
