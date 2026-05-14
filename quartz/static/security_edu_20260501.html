@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보안 취약 계정 및 비밀번호 관리 교육</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .hamburger-button {
+            display: none;
+        }
+
+        @media (min-width: 993px) {
+            .hamburger-button {
+                display: block;
+                font-size: 20px;
+                background: none;
+                border: none;
+                color: var(--header-text-color);
+                cursor: pointer;
+                padding: 15px;
+                position: fixed;
+                top: 10px;
+                left: 15px;
+                z-index: 1002;
+                transition: left 0.3s ease;
+                margin-bottom: 10px;
+            }
+
+            .sidebar.collapsed + main {
+                margin-left: 80px;
+            }
+            
+            .sidebar.collapsed .hamburger-button {
+                left: 15px;
+            }
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed .sidebar-header h1,
+        .sidebar.collapsed .sidebar-header p,
+        .sidebar.collapsed .sidebar-nav span,
+        .sidebar.collapsed .sidebar-footer {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-nav li a {
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .sidebar-nav li a i {
+            margin-right: 0;
+        }
+        
+        main.expanded {
+            margin-left: 80px;
+        }
+
+        :root {
+            --primary-color: #0052cc;
+            --primary-color-dark: #0040a3;
+            --background-color: #f4f5f7;
+            --text-color: #172b4d;
+            --text-color-light: #5e6c84;
+            --card-bg-color: #ffffff;
+            --border-color: #dfe1e6;
+            --header-bg-color: #0747a6;
+            --header-text-color: #ffffff;
+            --sidebar-width: 250px;
+            --danger-color: #de350b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--header-bg-color);
+            color: var(--header-text-color);
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .sidebar-header p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            margin-top: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--header-text-color);
+            font-weight: 500;
+            transition: background-color 0.3s, padding-left 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-nav li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .sidebar-nav li a.active {
+            background-color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .sidebar-nav li a i {
+            margin-right: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-footer {
+            padding: 1.5rem;
+            font-size: 0.8rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        main {
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+            flex-grow: 1;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-header {
+            margin-bottom: 2.5rem;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 1.5rem;
+        }
+        
+        .main-header h1 {
+            font-size: 2.4rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .main-header h3 {
+            color: var(--primary-color-dark);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .main-header .meta {
+            color: var(--text-color-light);
+            font-size: 0.95rem;
+        }
+
+        .content-section {
+            background-color: var(--card-bg-color);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .content-section-header {
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-size: 1.6rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        
+        .content-section-header i {
+            margin-right: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .card {
+            background-color: #fafbfc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            padding: 1.2rem 1.8rem;
+            background-color: #ebecf0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header h3 {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .card-body p {
+            margin-bottom: 1.2rem;
+        }
+
+        .card-body ul {
+            list-style-position: outside;
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-body ul li {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .highlight-danger {
+            color: var(--danger-color);
+            font-weight: 700;
+            background-color: #ffebe6;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .video-box {
+            background-color: #000;
+            color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .video-link-btn {
+            display: inline-block;
+            background-color: var(--danger-color);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .video-link-btn:hover {
+            background-color: #bf2600;
+        }
+
+        .image-gallery {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .gallery-item {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-image:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-caption {
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .quote-box {
+            background-color: #f4f5f7;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 85%;
+            max-height: 80%;
+        }
+
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            text-align: center;
+            color: #ccc;
+            padding: 20px 0;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            main { margin-left: 0; padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <button class="hamburger-button" id="hamburger-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#">
+                <h1>보안 교육 가이드</h1>
+                <p>계정 및 비밀번호 관리</p>
+            </a>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="#video-summary" class="nav-link active"><i class="fas fa-play-circle"></i> <span>영상 요약 및 사례</span></a></li>
+            <li><a href="#threats" class="nav-link"><i class="fas fa-biohazard"></i> <span>주요 위협 요소</span></a></li>
+            <li><a href="#rules" class="nav-link"><i class="fas fa-shield-alt"></i> <span>보안 강화 수칙</span></a></li>
+            <li><a href="#checklist" class="nav-link"><i class="fas fa-tasks"></i> <span>즉시 실행 사항</span></a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <p>© 2026 경영지원본부 전산팀</p>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <header class="main-header">
+            <h1>보안 취약 계정 및 비밀번호 관리 교육</h1>
+            <h3>"뚫리는 건 순간, 막는 건 습관" - 당신의 계정은 안전합니까?</h3>
+            <p class="meta">발행일: <strong>2026년 5월 01일</strong></p>
+        </header>
+
+        <section id="video-summary" class="content-section">
+            <div class="content-section-header">
+                <i class="fas fa-play-circle"></i>
+                <h2>경각심 제고 단편 영상 및 사례</h2>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>국가사이버안보센터(NCSC) 교육 영상 요약</h3>
+                </div>
+                <div class="card-body">
+                    <div class="video-box">
+                        <i class="fas fa-film fa-3x" style="margin-bottom: 1rem;"></i>
+                        <p><strong>[단편 영상] 보안 취약 계정 생성 피해 사례</strong></p>
+                        <p style="font-size: 0.9rem; color: #ccc;">국내 사용자 대부분이 유사한 비밀번호를 여러 서비스에서 재사용하는 실태 고발</p>
+                        <a href="https://www.ncsc.go.kr/ko/main/PageLink.html?token=MDEyMzQ1Njc4OWFiY2RlZrBvBnCd4cC_Aqu-HrYk1bjdjHKJSIH65f9Ppn2rRygoFbwddIZJxlhCLVmoDUN1dpJCDRzLNN9CsLFesokirH9rZH0cTld5XSteBFGjFHx2" target="_blank" class="video-link-btn">
+                            <i class="fas fa-external-link-alt"></i> 영상 시청하기 (사고사례 포함)
+                        </a>
+                    </div>
+                    
+                    <div class="quote-box">
+                        "당신은 예측 가능한 사람이었다. 하나의 비밀번호로 모든 계정을 연다. <br>
+                        <strong>한 번의 해킹으로 당신이 가입한 모든 사이트가 뚫립니다.</strong>"
+                    </div>
+
+                    <ul>
+                        <li><span class="highlight-danger">패턴 분석의 위험</span>: 대소문자와 특수문자를 섞어도, 다른 사이트와 유사한 패턴을 사용하면 해커의 '웹 유출 데이터 매칭'을 피할 수 없습니다.</li>
+                        <li><span class="highlight-danger">연쇄 탈취</span>: 단 하나의 계정 정보만 유출되어도, 동일한 비밀번호를 사용하는 메일, 금융, 사내 시스템이 도미노처럼 침해당합니다.</li>
+                        <li><span class="highlight-danger">기업/국가 안보 위협</span>: 개인의 안일한 습관이 기업의 기밀 유출을 넘어 국가 안보까지 위협할 수 있습니다.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="threats" class="content-section">
+            <div class="content-section-header">
+                <i class="fas fa-biohazard"></i>
+                <h2>한국 기업문화 특화 위협 요소</h2>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>우리가 무심코 넘기는 위험들</h3>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>일반 메신저를 통한 자료 송수신</strong>: 보안 및 로그 추적이 가능한 <strong>사내 그룹웨어/메신저</strong>가 아닌, 카카오톡 등 일반 메신저를 업무에 활용하여 중요 자료가 유출되는 사례가 빈번합니다.</li>
+                        <li><strong>'빨리빨리' 문화의 역습</strong>: 업무 편의를 위해 2단계 인증(MFA)을 귀찮게 여기거나, 급한 상황에서 동료와 계정 비밀번호를 공유하는 관행은 보안의 가장 큰 구멍입니다.</li>
+                        <li><strong>권위 사칭(Social Engineering)</strong>: 상급자나 인사/재무 부서를 사칭하여 "긴급한 처리"를 요구하며 비밀번호 변경이나 정보 입력을 유도하는 공격에 취약합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="rules" class="content-section">
+            <div class="content-section-header">
+                <i class="fas fa-shield-alt"></i>
+                <h2>보안 강화 수칙</h2>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>철저한 계정 관리를 위한 3대 원칙</h3>
+                </div>
+                <div class="card-body">
+                    <div class="image-gallery" style="justify-content: center; margin-bottom: 2rem;">
+                        <div class="gallery-item" style="max-width: 400px;">
+                            <img src="image/MFA.png" alt="철저한 계정관리를 위한 3대 원칙 준수" class="gallery-image">
+                            <div class="gallery-caption">계정 관리를 위한 3대 원칙</div>
+                        </div>
+                    </div>
+                    <ul>
+                        <li><strong>[원칙 1] Zero Trust - 일단 의심하기</strong>: 사내 동료나 상급자의 요청이라도 민감 정보나 금전 관련 사항은 반드시 유선 등 별도 채널로 재확인하십시오.</li>
+                        <li><strong>[원칙 2] 사이트별 독립적 패스워드</strong>: 유사한 패턴(예: 서비스명+123!)을 버리고, 각 서비스마다 전혀 다른 독립적인 비밀번호를 사용하십시오.</li>
+                        <li><strong>[원칙 3] 다중 요소 인증(MFA) 필수 적용</strong>: 비밀번호가 뚫려도 2차 인증이 있다면 계정을 지킬 수 있습니다. 사내외 모든 중요 시스템에 MFA를 활성화하십시오.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>일상 속 실천 사항</h3>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>한 번 더 확인하기</strong>: 새로운 기기 접속 알림이나 로그인 메일을 받았을 때 본인이 아니라면 즉시 비밀번호를 변경하고 보안팀에 신고하십시오.</li>
+                        <li><strong>정기적 정리</strong>: 사용하지 않는 외부 앱 연동, 소셜 로그인 연결 계정을 주기적으로 검토하고 해제하십시오.</li>
+                        <li><strong>공식 채널 활용</strong>: 모든 업무 자료 송수신은 반드시 <strong>회사가 승인한 그룹웨어 및 공식 메신저</strong>만 사용하십시오.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="checklist" class="content-section">
+            <div class="content-section-header">
+                <i class="fas fa-tasks"></i>
+                <h2>즉시 실행 사항 (Today's Mission)</h2>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li style="border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;">
+                            <i class="far fa-square" style="margin-right: 10px;"></i> 사내 그룹웨어 비밀번호가 포털(네이버, 구글 등)과 동일한지 확인하고, 같다면 <strong>지금 즉시 변경</strong>하십시오.
+                        </li>
+                        <li style="border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;">
+                            <i class="far fa-square" style="margin-right: 10px;"></i> 업무용 메일 및 주요 시스템의 2단계 인증 설정 상태를 점검하십시오.
+                        </li>
+                        <li style="border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;">
+                            <i class="far fa-square" style="margin-right: 10px;"></i> 스마트폰에 설치된 앱 중 불필요한 권한이 설정된 앱이나 사용하지 않는 앱을 삭제하십시오.
+                        </li>
+                        <li>
+                            <i class="far fa-square" style="margin-right: 10px;"></i> 사내 게시판의 최신 보안 공지사항을 숙지하십시오.
+                        </li>
+                    </ul>
+                    <p style="text-align: center; margin-top: 2rem; font-weight: 700; color: var(--primary-color);">
+                        보안은 나로부터 시작됩니다. 지금 실천하십시오!
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+
+            if (hamburgerBtn && sidebar && mainContent) {
+                hamburgerBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('collapsed');
+                    mainContent.classList.toggle('expanded');
+                });
+            }
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main .content-section');
+
+            const onScroll = () => {
+                let currentSectionId = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 150) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href');
+                    if (href && currentSectionId && href.includes(currentSectionId)) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', onScroll);
+            onScroll();
+
+            // Image Modal
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
+            const captionText = document.getElementById("caption");
+            const galleryImages = document.querySelectorAll(".gallery-image");
+            const closeBtn = document.getElementsByClassName("close")[0];
+
+            galleryImages.forEach(img => {
+                img.addEventListener('click', () => {
+                    modal.style.display = "block";
+                    modalImg.src = img.src;
+                    captionText.innerHTML = img.alt;
+                });
+            });
+
+            closeBtn.onclick = () => modal.style.display = "none";
+            window.onclick = (event) => {
+                if (event.target == modal) modal.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
